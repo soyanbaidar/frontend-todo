@@ -1,0 +1,45 @@
+name: React Static CI
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# env:
+#   APP_NAME: React Todo
+#   BUILD_ENV: production
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # - name: Show variables
+      #   run: |
+      #     echo "Application: $APP_NAME"
+      #     echo "Environment: $BUILD_ENV"
+
+      # - name: Show repository variable
+      #   run: 'echo "App Title= ${{ vars.APP_TITLE }}"'
+
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+        env:
+          CI: false
+
+      # - name: Upload build artifact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: cicd-react-app-production-${{ github.sha }}
+      #     path: build
