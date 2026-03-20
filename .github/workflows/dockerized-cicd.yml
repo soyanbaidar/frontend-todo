@@ -1,12 +1,11 @@
 name: CI Build Pipeline
 
 on:
- workflow_dispatch:
- 
-jobs: 
+  workflow_dispatch:
+
+jobs:
   build:
     runs-on: self-hosted
-    
     steps:
       - uses: actions/checkout@v4
 
@@ -27,34 +26,18 @@ jobs:
           docker push ${{ secrets.DOCKER_USERNAME }}/cicd-demo:${{ github.sha }}
 
   deploy:
-   runs-on: self-hosted
-   needs: build
-   if: github.ref == 'refs/heads/main'
+    runs-on: self-hosted
+    needs: build
+    steps:
+      - name: Deploy container locally
+        run: |
+          docker pull ${{ secrets.DOCKER_USERNAME }}/cicd-demo:${{ github.sha }}
 
-  # steps:
-  #   - name: Deploy to prod server
-  #     uses: appleboy/ssh-action@v1.0.3
-  #     with:
-  #       host: ${{ secrets.STAGING_HOST }}
-  #       username: ${{ secrets.STAGING_USER }}
-  #       key: ${{ secrets.STAGING_SSH_KEY }}
-  #       script: |
-  #         docker pull ${{ secrets.DOCKER_USERNAME }}/cicd-demo:${{ github.sha }}
-  #         docker stop cicd-demo || true
-  #         docker rm cicd-demo || true
-  #         docker run -d -p 3000:3000 --name cicd-demo ${{ secrets.DOCKER_USERNAME }}/cicd-demo:${{ github.sha }}
+          docker stop cicd-demo || true
+          docker rm cicd-demo || true
 
-
-   steps:
-     - name: Deploy container locally
-       run: |
-         docker pull ${{ secrets.DOCKER_USERNAME }}/cicd-demo:${{ github.sha }}
- 
-         docker stop cicd-demo || true
-         docker rm cicd-demo || true
- 
-         docker run -d \
-           -p 3000:80 \
-           --name cicd-demo \
-           --restart unless-stopped \
-           ${{ secrets.DOCKER_USERNAME }}/cicd-demo:${{ github.sha }}
+          docker run -d \
+            -p 3000:80 \
+            --name cicd-demo \
+            --restart unless-stopped \
+            ${{ secrets.DOCKER_USERNAME }}/cicd-demo:${{ github.sha }}
