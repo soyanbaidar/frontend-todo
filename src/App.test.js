@@ -5,10 +5,10 @@ import App from "./App";
 describe("Todo App", () => {
 
   test("renders application title", () => {
-    render(<App />);
-    const title = screen.getByText(/Techaxis TODO lists Dockerized/i);
-    expect(title).toBeInTheDocument();
-  });
+  render(<App />);
+  const title = screen.getByText(/TODO morning tasks/i);
+  expect(title).toBeInTheDocument();
+});
 
   test("shows empty tasks message when no tasks exist", () => {
     render(<App />);
