@@ -5,22 +5,22 @@ on:
     branches: [main]
   workflow_dispatch:
 
-# env:
-#   APP_NAME: React Todo
-#   BUILD_ENV: production
+env:
+  APP_NAME: React Todo
+  BUILD_ENV: production
 
 jobs:
   build:
     runs-on: self-hosted
 
     steps:
-      # - name: Show variables
-      #   run: |
-      #     echo "Application: $APP_NAME"
-      #     echo "Environment: $BUILD_ENV"
+      - name: Show variables
+        run: |
+          echo "Application: $APP_NAME"
+          echo "Environment: $BUILD_ENV"
 
-      # - name: Show repository variable
-      #   run: 'echo "App Title= ${{ vars.APP_TITLE }}"'
+      - name: Show repository variable
+        run: 'echo "App Title= ${{ vars.APP_TITLE }}"'
 
       - uses: actions/checkout@v4
 
@@ -38,8 +38,8 @@ jobs:
         env:
           CI: false
 
-      # - name: Upload build artifact
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: cicd-react-app-production-${{ github.sha }}
-      #     path: build
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cicd-react-app-production-${{ github.sha }}
+          path: build
